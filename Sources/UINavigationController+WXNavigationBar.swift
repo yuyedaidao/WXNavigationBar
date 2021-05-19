@@ -54,7 +54,7 @@ extension UINavigationController {
     /// rootNav.wx_enableWXNavigationBar = false
     /// present(rootNav, animated: true)
     @objc open var wx_enableWXNavigationBar: Bool {
-        get { return (objc_getAssociatedObject(self, &AssociatedKeys.enableWXNavigationBar) as? Bool) ?? true }
+        get { return (objc_getAssociatedObject(self, &AssociatedKeys.enableWXNavigationBar) as? Bool) ?? false }
         set { objc_setAssociatedObject(self, &AssociatedKeys.enableWXNavigationBar, newValue, .OBJC_ASSOCIATION_ASSIGN) }
     }
     
@@ -62,6 +62,7 @@ extension UINavigationController {
         let cls = UINavigationController.self
         swizzleMethod(cls, #selector(UINavigationController.pushViewController(_:animated:)), #selector(UINavigationController.wx_pushViewController(_:animated:)))
         swizzleMethod(cls, #selector(UINavigationController.setViewControllers(_:animated:)), #selector(UINavigationController.wx_setViewControllers(_:animated:)))
+        swizzleMethod(cls, #selector(UINavigationController.viewDidLoad), #selector(UINavigationController.wx_viewDidLoad))
     }()
     
     func configureNavigationBar() {
@@ -126,6 +127,13 @@ extension UINavigationController {
         
         wx_setViewControllers(viewControllers, animated: animated)
         
+    }
+    
+    @objc private func wx_viewDidLoad() {
+        let type = "\(self.classForCoder)"
+        let set = WXNavigationBarManger.shared.enableUINavigationControllers
+        wx_enableWXNavigationBar = set.isEmpty ? true : (set.contains(type) ? true : false)
+        wx_viewDidLoad()
     }
     
     private func enableFullscreenPopGesture() {

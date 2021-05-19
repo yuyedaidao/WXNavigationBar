@@ -7,6 +7,22 @@
 
 import UIKit
 
+public class WXNavigationBarManger {
+    public static let shared = WXNavigationBarManger()
+    var enableUINavigationControllers: Set<String> = []
+    private init() {
+        UINavigationController.swizzleNavigationControllerOnce
+        UIViewController.swizzleUIViewControllerOnce
+        UINavigationBar.swizzleNavigationBarOnce
+    }
+    
+    /// 启动 WXNavigationBar
+    /// - Parameter enableUINavigationControllers: 启动WXNavigationBar的UINavigationController的名字 注意，传空时默认都启动
+    public func setup(_ enableUINavigationControllers: Set<String> = []) {
+        self.enableUINavigationControllers = enableUINavigationControllers
+    }
+}
+
 public class WXNavigationBar: UIView {
     
     /// Global settings of NavigationBar
@@ -116,7 +132,4 @@ public class WXNavigationBar: UIView {
         containerView.addSubview(subView)
     }
     
-    public static func setup() {
-        UIApplication.runOnce
-    }
 }

@@ -89,6 +89,8 @@ extension UINavigationController {
                 let backImage = viewController.wx_backImage
                 backButtonItem = UIBarButtonItem(image: backImage, style: .plain, target: self, action: #selector(backButtonClicked))
             }
+            backButtonItem.isAccessibilityElement = true
+            backButtonItem.accessibilityLabel = "返回"
             viewController.navigationItem.leftBarButtonItem = backButtonItem
         }
         
@@ -117,6 +119,8 @@ extension UINavigationController {
                         backButtonItem = UIBarButtonItem(image: backImage, style: .plain, target: self, action: #selector(backButtonClicked))
                     }
                     viewController.navigationItem.leftBarButtonItem = backButtonItem
+                    backButtonItem.isAccessibilityElement = true
+                    backButtonItem.accessibilityLabel = "返回"
                 }
                 
                 if viewController.wx_fullScreenInteractivePopEnabled {
